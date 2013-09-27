@@ -1,0 +1,47 @@
+{% block Chessboard %}
+<div id="chessboard-wrap" ng-controller="ChessboardCtrl" ng-init="init({{ game_id }}, {{ move_count }}, {{ my_turn }}, {{ color }}, '{{ white }}', '{{ black }}', '{{ ep_square }}', '{{ ep_piece }}', '{{ castle }}', {{ started }}, {{ ended }}, '{{ winner }}')">
+	<div ng-if="ended" id="notification-box" class="box">
+		<p ng-if="winner">
+			Checkmate! <span>{[{ winner }]}</span> has won the game!
+		</p>
+		<p ng-if="!winner">
+			The game has ended with a draw!
+		</p>
+	</div>
+	<div ng-if="started && !ended" id="turn-box" class="box">
+		<p>
+			{[{ getTurnColor() }]} to move
+		</p>
+	</div>
+	<div class="player-name">
+		Black: <span>{[{ getPlayerDisplayName(false) }]}</span>
+	</div>
+	<div id="chessboard">
+		<table>
+			<tbody>
+				<tr ng-repeat="row in board | reverse track by $index">
+					<td class="row-label">{[{ 8 - $index }]}</td>
+					<td	ng-repeat="cell in row track by $index" 
+						data-coords="{[{ ($index + 1) + '' + (8 - $parent.$index) }]}"
+						ng-click="squareClicked($index + 1, 8 - $parent.$index)" >
+						<img	data-id="{[{ cell.id }]}" 
+								ng-mouseenter="highlightMovesOn(cell)"
+								ng-mouseleave="highlightMovesOff()" 
+								ng-if="cell" 
+								class="chess-piece" 
+								src="{{ asset('bundles/polcodechess/images/pieces') }}/{[{ cell.name }]}.ico"
+						>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td ng-repeat="letter in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']" class="col-label">{[{ letter }]}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="player-name">
+		White: <span>{[{ getPlayerDisplayName(true) }]}</span>
+	</div>
+</div>
+{% endblock %}

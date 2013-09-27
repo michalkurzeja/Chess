@@ -1,0 +1,38 @@
+polcode_chess_homepage:
+    pattern:  /
+    defaults: { _controller: PolcodeChessBundle:Default:index }
+
+new_game:
+    pattern: /create
+    defaults: { _controller: PolcodeChessBundle:Game:create }
+    
+join_game:
+    pattern: /join/{game_id}
+    defaults: { _controller: PolcodeChessBundle:Game:join }
+    
+display:
+    pattern: /game/{game_id}
+    defaults: { _controller: PolcodeChessBundle:Game:display }
+    requirements:
+        game_id: \d+
+
+update:
+    pattern: /game/{game_id}/update
+    defaults: { _controller: PolcodeChessBundle:Game:update }
+    methods:  [POST]
+    requirements:
+        game_id: \d+
+
+move:
+    pattern: /game/{game_id}/move
+    defaults: { _controller: PolcodeChessBundle:Game:move }
+    methods:  [POST]
+    requirements:
+        game_id: \d+
+
+get_pieces:
+    pattern: /game/{game_id}/pieces
+    defaults: { _controller: PolcodeChessBundle:Game:getPieces }
+    requirements:
+        game_id: \d+
+

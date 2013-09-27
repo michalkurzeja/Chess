@@ -1,0 +1,9 @@
+{% extends 'PolcodeChessBundle::layout.html.twig' %}
+
+{%block content %}
+	{{ parent() }}
+	<ul>
+		<a href="{{ path('new_game') }}">Create new game</a>
+		<a href="#">Join game</a>
+	</ul>
+{% endblock %}

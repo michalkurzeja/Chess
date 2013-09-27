@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="polcodeChess">
+	<head>
+		<meta charset="UTF-8">
+		{% block title %}{% endblock %}
+		{% block styles %}
+			{% include 'PolcodeChessBundle::template_parts/css.html.twig' %}
+		{% endblock %}
+		{% block javascripts %}
+			{% include 'PolcodeChessBundle::template_parts/js_head.html.twig' %}
+		{% endblock %}
+	</head>
+	<body>
+		<div id="main-wrap">
+			<header id="main-header">
+				{% include 'PolcodeChessBundle::template_parts/page_header.html.twig' %}
+			</header>
+			<main>
+				{% block content %}{% endblock %}	
+			</main>
+			<footer>
+				{% include 'PolcodeChessBundle::template_parts/page_footer.html.twig' %}
+			</footer>
+		</div>
+	</body>
+</html>

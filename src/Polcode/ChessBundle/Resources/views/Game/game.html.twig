@@ -1,0 +1,7 @@
+{% extends 'PolcodeChessBundle::layout.html.twig' %}
+
+{%block content %}
+	{{ parent() }}
+	{% include 'PolcodeChessBundle::Chessboard/board.html.twig' %}
+	<pre>{{ content }}</pre>
+{% endblock %}

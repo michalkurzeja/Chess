@@ -1,0 +1,201 @@
+html,
+html * {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: url('../images/background.jpg') repeat;
+	background-size: 30%;
+}
+
+main {
+	background: #BABABA;
+	min-height: 800px;
+	padding: 30px;
+}
+
+#main-wrap {
+	width: 1100px;
+	margin: 0 auto;
+}
+
+#main-header {
+	overflow: hidden;
+}
+
+#main-header,
+#main-wrap footer {
+	background-image: linear-gradient(left bottom, rgb(0,0,0) 27%, rgb(54,54,54) 57%, rgb(97,97,97) 100%);
+	background-image: -o-linear-gradient(left bottom, rgb(0,0,0) 27%, rgb(54,54,54) 57%, rgb(97,97,97) 100%);
+	background-image: -moz-linear-gradient(left bottom, rgb(0,0,0) 27%, rgb(54,54,54) 57%, rgb(97,97,97) 100%);
+	background-image: -webkit-linear-gradient(left bottom, rgb(0,0,0) 27%, rgb(54,54,54) 57%, rgb(97,97,97) 100%);
+	background-image: -ms-linear-gradient(left bottom, rgb(0,0,0) 27%, rgb(54,54,54) 57%, rgb(97,97,97) 100%);
+	
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		right top,
+		color-stop(0.27, rgb(0,0,0)),
+		color-stop(0.57, rgb(54,54,54)),
+		color-stop(1, rgb(97,97,97))
+	);
+	
+	color: #fff;
+}
+
+#main-header h1 {
+	margin: 50px 90px;
+	display: inline-block;
+	color: #7D7D7D;
+	font-family: 'Aguafina Script', cursive;
+	font-size: 50px;
+	border-bottom: 2px solid #525252;
+}
+
+#main-header img {
+	float: right;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+#chessboard-wrap {
+	display: inline-block;
+}
+
+.box {
+	padding: 10px;
+	border: 3px solid #707070;
+	border-radius: 10px;
+	background: #C4C4C4;
+	margin-bottom: 10px;
+	box-shadow: 0 0 25px white inset;
+}
+
+.box p {
+	margin: 0;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.4em;
+}
+
+div.player-name {
+	margin: 5px 10px;
+	font-weight: bold;
+	font-size: 1.1em;
+	text-align: right;
+}
+
+div.player-name span {
+	font-size: 1.2em;
+}
+
+#chessboard {
+	background: #707070;
+	border-radius: 10px;
+	display: inline-block;
+	padding: 20px 20px 0 0;
+}
+
+#chessboard td {
+	border-radius: 5px;
+	width: 70px;
+	height: 70px;
+	text-align: center;
+}
+
+#chessboard td:first-child {
+	width: 20px;
+}
+
+#chessboard tr:last-child td {
+	height: 20px;	
+}
+
+#chessboard td.col-label,
+#chessboard td.row-label {
+	font-weight: bold;
+}
+
+#chessboard tr:nth-child(2n) td:nth-child(2n+1),
+#chessboard tr:nth-child(2n+1) td:nth-child(2n) {
+	background: #C4C4C4;
+}
+
+#chessboard tr:nth-child(2n) td:nth-child(2n),
+#chessboard tr:nth-child(2n+1) td:nth-child(2n+1) {
+	background: #3D3D3D;
+}
+
+#chessboard td:hover {
+	box-shadow: 0 0 25px #F7D200 inset;
+}
+
+#chessboard td:first-child:hover,
+#chessboard tr:last-child td:hover {
+	box-shadow: none !important;
+}
+
+#chessboard td:first-child,
+#chessboard tr:last-child td {
+	border-radius: 0;
+	background: none !important;
+}
+
+.chess-piece {
+	width: 70px;
+	height: 70px;
+}
+
+.white {
+	color: white;
+}
+
+.black {
+	color: black;
+}
+
+.chess-piece,
+.kill-highlight,
+.selection-highlight,
+.selection-kill-highlight {
+	cursor: pointer;
+}
+
+.last-move-highlight {
+	box-shadow: 0 0 25px #001EFF inset;
+}
+
+.move-highlight {
+	box-shadow: 0 0 25px #76D914 inset;	
+}
+
+.kill-highlight {
+	box-shadow: 0 0 25px #A30000 inset;	
+}
+
+.selection-highlight {
+	box-shadow: 0 0 25px #FF9500 inset;	
+}
+
+.selection-kill-highlight {
+	box-shadow: 0 0 25px red inset;	
+}
+
+#chessboard tr:nth-child(2n) td:nth-child(2n+1):hover,
+#chessboard tr:nth-child(2n+1) td:nth-child(2n):hover,
+#chessboard tr:nth-child(2n) td:nth-child(2n+1).move-highlight,
+#chessboard tr:nth-child(2n+1) td:nth-child(2n).move-highlight {
+	background: #DBDBDB;
+}
+
+#chessboard tr:nth-child(2n) td:nth-child(2n):hover,
+#chessboard tr:nth-child(2n+1) td:nth-child(2n+1):hover, 
+#chessboard tr:nth-child(2n) td:nth-child(2n).move-highlight,
+#chessboard tr:nth-child(2n+1) td:nth-child(2n+1).move-highlight {
+	background: #828282;
+}
+
+.square-selected {
+	box-shadow: 0 0 25px #FF9500 inset !important;
+}
