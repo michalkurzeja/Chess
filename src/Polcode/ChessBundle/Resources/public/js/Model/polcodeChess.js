@@ -4,11 +4,15 @@ polcodeChess.config(function($interpolateProvider) {
 	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 })
 
-polcodeChess.controller('ModalCtrl', function($scope, $modal) {
+ModalCtrl = function($scope, $modalInstance) {
 	console.log('in ModalCtrl');
-});
+	
+	$scope.push = function(value) {
+		$modalInstance.close(value);
+	}
+};
 
-polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, $modal) {
+polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, $controller, $modal) {
 
 	$scope.game_id;
 	$scope.move_count;
@@ -31,14 +35,27 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 	var en_passant_square;
 	var en_passant_piece;
 	var castle = null;
+	
+	var modalInstance; 
 
-	var modal; 
-
-	$scope.openModal = function() {
-		modal = $modal.open({
+	$scope.openModal = function(piece, piece_info) {
+		modalInstance = $modal.open({
 			templateUrl: 'modal.html',
-			scope: $scope,
-			controller: polcodeChess.ModalCtrl
+			controller: ModalCtrl,
+			backdrop: 'static',
+			keyboard: false
+		});
+		
+		modalInstance.result.then(function(new_class) {
+			var color = piece.is_white ? 'White' : 'Black';
+			
+			piece.classname = new_class;
+			piece.name = new_class + color;
+			console.log(piece);
+			
+			coords = {x: piece.file, y: piece.rank};
+			
+			sendMoveRequest(piece_info, coords, new_class);
 		});
 	}
 
@@ -220,8 +237,6 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 			
 		console.log('moving [' + piece.file + ', ' + piece.rank + '] to [' + coords.x + ', ' + coords.y + ']');
 
-		turn = false;
-		
 		lastMoveHighlight(piece, coords.x, coords.y);
 		
 		var piece_info = { id: piece.id, file: piece.file, rank: piece.rank };
@@ -232,7 +247,7 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 					);
 		
 		if( isPawnOnTheOtherSide(piece) ) {
-			$scope.openModal();
+			$scope.openModal(piece, piece_info);
 			
 			return;
 		}
@@ -266,11 +281,17 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 		console.log('end movePiece()');
 	}
 	
-	function sendMoveRequest(piece_info, coords)
+	function sendMoveRequest(piece_info, coords, new_class)
 	{
+		turn = false;
+		
 		$scope.move_count++;		
 
 		var moveData = { piece: { id: piece_info.id, file: piece_info.file, rank: piece_info.rank }, coords: { file: coords.x, rank: coords.y } };
+		
+		if(typeof new_class != "undefined") {
+			moveData.new_class = new_class;
+		}
 		
 		$http({method: 'POST', url:  $scope.game_id + '/move', data: moveData, headers: {'Content-type': 'application/json'}})
 			.success( function(data) { 

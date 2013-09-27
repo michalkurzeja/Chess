@@ -277,13 +277,25 @@ class GameMaster
             $this->game->setEnPassable( null );
         }
         
-        $this->updatePieceCoordinates($piece, $data->coords->file, $data->coords->rank);
-        
+        if( isset($data->new_class) ) {
+            $piece = $this->swapPiece($piece, $data->new_class, $data->coords->file, $data->coords->rank);
+        } else {
+            $this->updatePieceCoordinates($piece, $data->coords->file, $data->coords->rank);        
+        }
+                
         $this->afterMove($game_id, $piece, $player_white);
 
         $this->checkRulesAfterMove($piece);
         
         $this->em->flush();
+    }
+
+    public function swapPiece(Pieces\Piece $piece, $new_class, $file, $rank) {
+        $color = $piece->getIsWhite();
+        $this->chessboard->removePiece($piece);
+        $this->em->remove($piece);
+        
+        return $this->createPiece($new_class, $file, $rank, $color, $this->game);
     }
 
     public function updatePieceCoordinates(Pieces\Piece $piece, $file, $rank)

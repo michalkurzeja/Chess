@@ -31,13 +31,18 @@ class Chessboard
         $this->board = array();
         
         foreach($whites as &$piece) {
-            $this->board[$piece->getFile() . $piece->getRank()] = $piece;
+            $this->addPiece($piece);
         }
 
         foreach($blacks as &$piece) {
-            $this->board[$piece->getFile() . $piece->getRank()] = $piece;
+             $this->addPiece($piece);
         }
     } 
+    
+    public function addPiece($piece)
+    {
+        $this->board[$piece->getFile() . $piece->getRank()] = $piece;
+    }
     
     public function getEnPassantSquare($en_passant_piece)
     {

@@ -30,10 +30,6 @@ move:
     requirements:
         game_id: \d+
 
-modal:
-    pattern: /game/modal
-    defaults: { _controller: PolcodeChessBundle:Game:modal }
-
 get_pieces:
     pattern: /game/{game_id}/pieces
     defaults: { _controller: PolcodeChessBundle:Game:getPieces }

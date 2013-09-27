@@ -45,19 +45,19 @@
 	</div>
 	
 	<script type="text/ng-template" id="modal.html">
-		<div class="modal-header">
-            <h3>I'm a modal!</h3>
-        </div>
-		<div class="modal-body">
-			<button type="button" class="btn piece-btn">Queen</button>
-			<button type="button" class="btn piece-btn">Rook</button>
-			<button type="button" class="btn piece-btn">Knight</button>
-			<button type="button" class="btn piece-btn">Bishop</button>
+		<div>
+			<div class="modal-header">
+	            <h3>Choose piece</h3>
+	        </div>
+			<div class="modal-body pieces-modal">
+				<div>
+					<button ng-click="push('Queen')" type="button" class="btn btn-inverse">Queen</button>
+					<button ng-click="push('Rook')" type="button" class="btn btn-inverse">Rook</button>
+					<button ng-click="push('Bishop')" type="button" class="btn btn-inverse">Bishop</button>
+					<button ng-click="push('Knight')" type="button" class="btn btn-inverse">Knight</button>
+				</div>
+			</div>
 		</div>
-		<div class="modal-footer">
-            <button class="btn btn-primary" >OK</button>
-            <button class="btn btn-warning" >Cancel</button>
-        </div>
 	</script>
 </div>
 {% endblock %}
