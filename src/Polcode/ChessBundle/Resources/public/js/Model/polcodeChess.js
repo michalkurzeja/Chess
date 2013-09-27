@@ -1,11 +1,15 @@
-var polcodeChess = angular.module('polcodeChess', []);
+var polcodeChess = angular.module('polcodeChess', ['ui.bootstrap']);
 
 polcodeChess.config(function($interpolateProvider) {
 	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 })
 
-polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory) {
-	
+polcodeChess.controller('ModalCtrl', function($scope, $modal) {
+	console.log('in ModalCtrl');
+});
+
+polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, $modal) {
+
 	$scope.game_id;
 	$scope.move_count;
 	$scope.player_color;
@@ -27,6 +31,16 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory) 
 	var en_passant_square;
 	var en_passant_piece;
 	var castle = null;
+
+	var modal; 
+
+	$scope.openModal = function() {
+		modal = $modal.open({
+			templateUrl: 'modal.html',
+			scope: $scope,
+			controller: polcodeChess.ModalCtrl
+		});
+	}
 
 	$scope.highlightMovesOn = function(piece) {
 		if(turn) {
@@ -218,7 +232,7 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory) 
 					);
 		
 		if( isPawnOnTheOtherSide(piece) ) {
-			alert('Piece!');
+			$scope.openModal();
 			
 			return;
 		}

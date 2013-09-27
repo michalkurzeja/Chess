@@ -148,5 +148,10 @@ class GameController extends Controller
         } catch(NotYourGameException $e) {
             return new Response('Not your game!', 404);
         }
-    }    
+    }  
+    
+    public function modalAction()
+    {
+        return $this->render('PolcodeChessBundle:Chessboard:modal.html.twig', array());
+    }  
 }

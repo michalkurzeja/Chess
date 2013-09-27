@@ -1,3 +1,9 @@
+.nav,
+.pagination,
+.carousel a { 
+	cursor: pointer;
+}
+
 html,
 html * {
 	margin: 0;
