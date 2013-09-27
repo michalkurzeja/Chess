@@ -173,7 +173,18 @@ class GameMaster
             $update['move_count'] = $this->getMoveCount();
                         
             /* get last moved piece */
-            $update['last_moved'] = $this->game_utils->getShortPieceArray( $this->game->getLastMoved() );
+            if( $this->hasSwapped() ) {
+                $swapped_piece = $this->game->getSwappedPiece();
+                $update['last_moved'] = array(
+                    'id' => $this->game->getSwappedOldId(),
+                    'file' => $swapped_piece->getFile(),
+                    'rank' => $swapped_piece->getRank()
+                );
+                
+                $update['swap_class'] = $swapped_piece->getPieceName();
+            } else {
+                $update['last_moved'] = $this->game_utils->getShortPieceArray( $this->game->getLastMoved() );
+            }
             
             /* square of piece captured in last turn or null */
             $update['captured'] = $this->game_utils->getShortPieceArray( $this->game->getLastCaptured() );
@@ -292,10 +303,33 @@ class GameMaster
 
     public function swapPiece(Pieces\Piece $piece, $new_class, $file, $rank) {
         $color = $piece->getIsWhite();
+        $old_id = $piece->getId();
+        
         $this->chessboard->removePiece($piece);
         $this->em->remove($piece);
         
-        return $this->createPiece($new_class, $file, $rank, $color, $this->game);
+        $new_piece = $this->createPiece($new_class, $file, $rank, $color, $this->game);
+        
+        $this->setSwapData($old_id, $new_piece);
+        
+        return $new_piece;
+    }
+
+    public function setSwapData($old_id, $new_piece)
+    {
+        $this->game->setSwappedPiece( $new_piece );
+        $this->game->setSwappedOldId( $old_id );
+    }
+
+    public function clearSwap()
+    {
+        $this->game->setSwappedPiece( null );
+        $this->game->setSwappedOldId( 0 );
+    }
+
+    public function hasSwapped()
+    {
+        return $this->game->getSwappedOldId() ? true : false;
     }
 
     public function updatePieceCoordinates(Pieces\Piece $piece, $file, $rank)
@@ -303,6 +337,7 @@ class GameMaster
         $this->chessboard->updatePiecePosition($piece->getCoordinates(), $file, $rank);
         $piece->setCoordinates( new Vector( $file, $rank ) ); /* set new coordinates for a piece */
         $piece->setHasMoved( true ); /* mark the piece as already moved */
+        $this->clearSwap();
     }
 
     public function getCapturePiece(Pieces\Piece $piece, Vector $new_coords)

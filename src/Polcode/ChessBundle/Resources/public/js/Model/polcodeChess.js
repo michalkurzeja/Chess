@@ -47,10 +47,7 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 		});
 		
 		modalInstance.result.then(function(new_class) {
-			var color = piece.is_white ? 'White' : 'Black';
-			
-			piece.classname = new_class;
-			piece.name = new_class + color;
+			swapClass(piece, new_class);
 			console.log(piece);
 			
 			coords = {x: piece.file, y: piece.rank};
@@ -165,6 +162,13 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 		return $scope.player_white ? 'Black' : 'White';
 	}
 	
+	function swapClass(piece, new_class) {
+		var color = piece.is_white ? 'White' : 'Black';
+			
+		piece.classname = new_class;
+		piece.name = new_class + color;
+	}
+
 	function getWinnerDisplayName(winner_name)
 	{
 		if($scope.ended && winner_name) {
@@ -184,13 +188,19 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 	
 	function update(data) {
 		if(!awaiting_move_response) {
+			if(typeof data.swap_class != 'undefined') {
+				var swap_class = data.swap_class;
+			} else {
+				var swap_class = false;
+			}
+			
 			if(typeof data.move_count != 'undefined' && (data.move_count == 0 || data.move_count > $scope.move_count)) {
 				console.log('Sync operations:');
 				turn = data.turn;
 				en_passant_square = data.en_passant_square;
 				en_passant_piece = data.en_passant_piece;
 				$scope.move_count = data.move_count;		
-				updateMovedPiece(data.last_moved, data.captured);
+				updateMovedPiece(data.last_moved, data.captured, swap_class);
 				castle = data.castle;
 				refreshPiecesMoves(data.moves);
 				console.log('Sync completed');
@@ -331,7 +341,7 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 		$scope.board[ to.y ][ to.x ].rank = to.y + 1;
 	}
 	
-	function updateMovedPiece(last_moved, captured) {
+	function updateMovedPiece(last_moved, captured, swap_class) {
 		console.log('updateMovedPiece()');
 		
 		if(!last_moved) {
@@ -355,6 +365,10 @@ polcodeChess.controller('ChessboardCtrl', function($scope, $http, boardFactory, 
 					updatePieceCoordinates({x: j, y: i}, {x: last_moved.file - 1, y: last_moved.rank - 1});
 					
 					lastMoveHighlight(last_moved, j+1, i+1);
+					
+					if( swap_class ) {
+						swapClass(piece, swap_class);
+					}
 					
 					console.log('after move:');
 					console.log($scope.board[ last_moved.rank - 1 ][ last_moved.file - 1 ]);

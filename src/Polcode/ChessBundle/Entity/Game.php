@@ -99,6 +99,19 @@ class Game
     protected $ended = false;
     
     /**
+     * @ORM\Column(type="integer")
+     * 
+     *  @var int
+     */
+    protected $swapped_old_id = null;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Polcode\ChessBundle\Entity\Pieces\Piece")
+     * @ORM\JoinColumn(name="swapped_piece_id", referencedColumnName="id")
+     */
+    protected $swapped_piece = null;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -432,5 +445,51 @@ class Game
     public function getEnded()
     {
         return $this->ended;
+    }
+
+    /**
+     * Set swapped_old_id
+     *
+     * @param integer $swappedOldId
+     * @return Game
+     */
+    public function setSwappedOldId($swappedOldId)
+    {
+        $this->swapped_old_id = $swappedOldId;
+    
+        return $this;
+    }
+
+    /**
+     * Get swapped_old_id
+     *
+     * @return integer 
+     */
+    public function getSwappedOldId()
+    {
+        return $this->swapped_old_id;
+    }
+
+    /**
+     * Set swapped_piece
+     *
+     * @param \Polcode\ChessBundle\Entity\Pieces\Piece $swappedPiece
+     * @return Game
+     */
+    public function setSwappedPiece(\Polcode\ChessBundle\Entity\Pieces\Piece $swappedPiece = null)
+    {
+        $this->swapped_piece = $swappedPiece;
+    
+        return $this;
+    }
+
+    /**
+     * Get swapped_piece
+     *
+     * @return \Polcode\ChessBundle\Entity\Pieces\Piece 
+     */
+    public function getSwappedPiece()
+    {
+        return $this->swapped_piece;
     }
 }
