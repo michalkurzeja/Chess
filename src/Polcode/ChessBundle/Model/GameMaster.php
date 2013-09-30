@@ -19,14 +19,12 @@ class GameMaster
     private $game_utils;
     private $cache;
     private $rules = null;
-    private $logger;
     
-    public function __construct($em, $game_utils, $cache, $logger)
+    public function __construct($em, $game_utils, $cache)
     {
         $this->em = $em;
         $this->game_utils = $game_utils;
         $this->cache = $cache;
-        $this->logger = $logger;
     }
     
     public function createNewGame($user)
@@ -76,14 +74,14 @@ class GameMaster
             throw $e ;
         }
                 
-        $this->chessboard = $this->getChessboardFromDb($this->game, $this->logger);
+        $this->chessboard = $this->getChessboardFromDb($this->game);
         
         return $this->game->isPlayerWhite($user);
     }
     
-    public function getChessboardFromDb($game, $logger)
+    public function getChessboardFromDb($game)
     {
-        return new Chessboard($game->getWhitePieces()->getValues(), $game->getBlackPieces()->getValues(), $logger);
+        return new Chessboard($game->getWhitePieces()->getValues(), $game->getBlackPieces()->getValues());
     }
     
     public function dev_starting_pos($game)
@@ -93,7 +91,7 @@ class GameMaster
         $blacks = array(    $this->createPiece('Queen', 5, 8, false, $game),
                             $this->createPiece('Pawn', 1, 7, false, $game) );
                             
-        $this->chessboard = new Chessboard($whites, $blacks, $this->logger);
+        $this->chessboard = new Chessboard($whites, $blacks);
     }
     
     public function generateStartingPositions($game)
@@ -119,7 +117,7 @@ class GameMaster
             $blacks[] =  $this->createPiece('Pawn', $i, 7, false, $game);
         }
 
-        $this->chessboard = new Chessboard($whites, $blacks, $this->logger);
+        $this->chessboard = new Chessboard($whites, $blacks);
     }
     
     public function createPiece($class, $file, $rank, $is_white, $game)
@@ -309,6 +307,8 @@ class GameMaster
         $this->em->remove($piece);
         
         $new_piece = $this->createPiece($new_class, $file, $rank, $color, $this->game);
+        $this->chessboard->addPiece($new_piece);
+        $this->chessboard->addPieceToWhitesOrBlacks($new_piece);
         
         $this->setSwapData($old_id, $new_piece);
         

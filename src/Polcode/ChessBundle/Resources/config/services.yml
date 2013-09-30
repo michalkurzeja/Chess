@@ -1,7 +1,7 @@
 services:
     GameMaster:
         class: Polcode\ChessBundle\Model\GameMaster
-        arguments: [@doctrine.orm.entity_manager, @gameutilities, @winzou_cache.memcache, @logger]
+        arguments: [@doctrine.orm.entity_manager, @gameutilities, @winzou_cache.memcache]
 
     GameUtilities:
         class: Polcode\ChessBundle\Model\GameUtilities

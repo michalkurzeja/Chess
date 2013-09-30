@@ -15,12 +15,9 @@ class Chessboard
     
     private $board;
     
-    private $logger;
-    
-    public function __construct($whites, $blacks, $logger)
+    public function __construct($whites, $blacks)
     {
         $this->_init($whites, $blacks);
-        $this->logger = $logger;
     }
     
     private function _init($whites, $blacks)
@@ -42,6 +39,15 @@ class Chessboard
     public function addPiece($piece)
     {
         $this->board[$piece->getFile() . $piece->getRank()] = $piece;
+    }
+    
+    public function addPieceToWhitesOrBlacks($piece)
+    {
+        if( $piece->getIsWhite() ) {
+            $this->whites[] = $piece;
+        }
+        
+        $this->blacks[] = $piece;
     }
     
     public function getEnPassantSquare($en_passant_piece)
